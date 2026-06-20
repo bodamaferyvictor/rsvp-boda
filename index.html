@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Confirmación de Asistencia</title>
+<title>Boda de Mafer y Víctor</title>
 
 <style>
 body{
@@ -24,7 +24,18 @@ body{
 }
 
 h1{
+    font-size:28px;
+    font-weight:normal;
     color:#5b6d8a;
+    margin-bottom:5px;
+}
+
+h3{
+    font-size:40px;
+    font-weight:normal;
+    color:#3f4d63;
+    margin-top:0;
+    margin-bottom:25px;
 }
 
 select, button{
@@ -53,12 +64,11 @@ button{
 
 <div class="contenedor">
 
-<h1>Boda</h1>
-    
-<h2>Mafer & Víctor</h2>
+<h1>Boda de</h1>
+<h3>Mafer & Víctor</h3>
 
-<h2 id="nombre"></h2>
-    
+<h2 id="nombre">Cargando invitación...</h2>
+
 <p id="pases"></p>
 
 <label>¿Cuántas personas asistirán?</label><br>
@@ -79,75 +89,65 @@ Confirmar asistencia
 
 let invitados = {};
 
+// Cargar CSV
 fetch('invitadosboda.csv')
-.then(response => response.text())
+.then(r => r.text())
 .then(data => {
 
     const filas = data.trim().split('\n');
-    console.log(columnas);
 
     for(let i = 1; i < filas.length; i++){
 
-        const columnas = filas[i].split(/[,\t;]/);
+        const columnas = filas[i].split(',');
 
         invitados[columnas[0].trim()] = {
             nombre: columnas[1].trim(),
-            pases: parseInt(columnas[2].trim()|| 0)
+            pases: parseInt(columnas[2].trim())
         };
     }
 
-    cargarInvitado();
+    iniciar();
 });
 
-function cargarInvitado(){
+function iniciar(){
 
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
-    if(invitados[id]){
+    const invitado = invitados[id];
 
-        document.getElementById("nombre").innerText =
-        invitados[id].nombre;
-
-        document.getElementById("pases").innerText =
-        "Hemos reservado " +
-        invitados[id].pases +
-        " lugar(es) en su honor.";
-
-        const select =
-        document.getElementById("asistentes");
-
-        select.innerHTML = "";
-
-        for(let i = 0; i <= invitados[id].pases; i++){
-
-            const option =
-            document.createElement("option");
-
-            option.value = i;
-            option.text = i;
-
-            select.appendChild(option);
-        }
-
-    }else{
+    if(!invitado){
 
         document.getElementById("nombre").innerText =
         "Invitación no encontrada";
 
         document.getElementById("pases").innerText = "";
+        return;
+    }
+
+    document.getElementById("nombre").innerText = invitado.nombre;
+
+    document.getElementById("pases").innerText =
+    "Hemos reservado " + invitado.pases + " lugar(es) para ti 💍";
+
+    const select = document.getElementById("asistentes");
+    select.innerHTML = "";
+
+    for(let i = 0; i <= invitado.pases; i++){
+
+        let option = document.createElement("option");
+        option.value = i;
+        option.text = i;
+        select.appendChild(option);
     }
 }
 
 function confirmar(){
 
-    const cantidad =
-    document.getElementById("asistentes").value;
+    const cantidad = document.getElementById("asistentes").value;
 
     document.getElementById("mensaje").innerHTML =
-    "¡Gracias! Confirmaste " +
-    cantidad +
-    " asistente(s).";
+    "¡Gracias! Confirmaste " + cantidad + " asistente(s) 💕";
 }
 
 </script>
