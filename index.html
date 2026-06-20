@@ -1,95 +1,7 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Boda de Mafer y Víctor</title>
-
-<style>
-body{
-    font-family: Georgia, serif;
-    background:#f9f8f5;
-    text-align:center;
-    padding:40px;
-}
-
-.contenedor{
-    max-width:600px;
-    margin:auto;
-    background:white;
-    padding:30px;
-    border-radius:20px;
-    box-shadow:0 0 15px rgba(0,0,0,.1);
-}
-
-h1{
-    font-size:28px;
-    font-weight:normal;
-    color:#5b6d8a;
-    margin-bottom:5px;
-}
-
-h3{
-    font-size:40px;
-    font-weight:normal;
-    color:#3f4d63;
-    margin-top:0;
-    margin-bottom:25px;
-}
-
-select, button{
-    padding:12px;
-    margin-top:15px;
-    width:100%;
-    max-width:300px;
-}
-
-button{
-    background:#5b6d8a;
-    color:white;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-#mensaje{
-    margin-top:20px;
-    font-weight:bold;
-}
-</style>
-</head>
-
-<body>
-
-<div class="contenedor">
-
-<h1>Boda de</h1>
-<h3>Mafer & Víctor</h3>
-
-<h2 id="nombre">Cargando invitación...</h2>
-
-<p id="pases"></p>
-
-<label>¿Cuántas personas asistirán?</label><br>
-
-<select id="asistentes"></select>
-
-<br><br>
-
-<button onclick="confirmar()">
-Confirmar asistencia
-</button>
-
-<p id="mensaje"></p>
-
-</div>
-
 <script>
 
 let invitados = {};
 
-// Cargar CSV
 fetch('invitadosboda.csv')
 .then(r => r.text())
 .then(data => {
@@ -98,18 +10,20 @@ fetch('invitadosboda.csv')
 
     for(let i = 1; i < filas.length; i++){
 
-        const id = columnas[0].replace(/\s/g,'');
+        const columnas = filas[i].split(',');
+
+        const id = columnas[0].trim();
 
         invitados[id] = {
-            nombre: columnas[1].trim(),
-            pases: parseInt(columnas[2].trim())
+            nombre: columnas[1]?.trim() || "",
+            pases: parseInt(columnas[2]?.trim() || "0")
         };
     }
 
-    iniciar();
+    cargarInvitado(); // 👈 IMPORTANTE
 });
 
-function iniciar(){
+function cargarInvitado(){
 
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
@@ -151,6 +65,3 @@ function confirmar(){
 }
 
 </script>
-
-</body>
-</html>
