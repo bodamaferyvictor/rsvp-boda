@@ -88,11 +88,11 @@ fetch('invitadosboda.csv')
 
     for(let i = 1; i < filas.length; i++){
 
-        const columnas = filas[i].split(',');
+        const columnas = filas[i].split(/[,\t;]/);
 
         invitados[columnas[0].trim()] = {
             nombre: columnas[1].trim(),
-            pases: parseInt(columnas[2].trim())
+            pases: parseInt(columnas[2].trim()|| 0)
         };
     }
 
