@@ -70,18 +70,64 @@ Confirmar asistencia
 
 <script>
 
-const invitados = {
+let invitados = {};
 
-"M001":{
-nombre:"Familia García",
-pases:2
-},
+fetch('invitadosboda.csv')
+  .then(response => response.text())
+  .then(data => {
 
-"M002":{
-nombre:"Ana López",
-pases:1
-}
+    const filas = data.trim().split('\n');
 
+    for(let i = 1; i < filas.length; i++){
+
+      const columnas = filas[i].split(',');
+
+      invitados[columnas[0]] = {
+        nombre: columnas[1],
+        pases: parseInt(columnas[2])
+      };
+    }
+
+    cargarInvitado();
+  });
+
+function cargarInvitado(){
+
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  if(invitados[id]){
+
+    document.getElementById("nombre").innerText =
+    invitados[id].nombre;
+
+    document.getElementById("pases").innerText =
+    "Hemos reservado " +
+    invitados[id].pases +
+    " lugar(es) en su honor.";
+
+    let select =
+    document.getElementById("asistentes");
+
+    select.innerHTML = "";
+
+    for(let i = 0; i <= invitados[id].pases; i++){
+
+      let option =
+      document.createElement("option");
+
+      option.value = i;
+      option.text = i;
+
+      select.appendChild(option);
+    }
+
+  }else{
+
+    document.body.innerHTML =
+    "<h2>Invitación no encontrada</h2>";
+
+  }
 };
 
 const params = new URLSearchParams(window.location.search);
