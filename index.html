@@ -82,6 +82,7 @@ fetch('invitadosboda.csv')
 .then(data => {
 
     const filas = data.trim().split('\n');
+    console.log(columnas);
 
     for(let i = 1; i < filas.length; i++){
 
