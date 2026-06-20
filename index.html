@@ -53,7 +53,7 @@ button{
 
 <div class="contenedor">
 
-<h1>Boda de</h1>
+<h1>Boda</h1>
     
 <h2>Mafer & Víctor</h2>
 
@@ -92,7 +92,7 @@ fetch('invitadosboda.csv')
 
         invitados[columnas[0].trim()] = {
             nombre: columnas[1].trim(),
-            pases: parseInt(columnas[2])
+            pases: parseInt(columnas[2].trim())
         };
     }
 
