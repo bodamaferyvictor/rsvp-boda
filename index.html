@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Confirmación de Asistencia</title>
+
+<style>
+body{
+    font-family: Georgia, serif;
+    background:#f9f8f5;
+    text-align:center;
+    padding:40px;
+}
+
+.contenedor{
+    max-width:600px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 0 15px rgba(0,0,0,.1);
+}
+
+h1{
+    color:#5b6d8a;
+}
+
+select, button{
+    padding:12px;
+    margin-top:15px;
+    width:100%;
+    max-width:300px;
+}
+
+button{
+    background:#5b6d8a;
+    color:white;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+<h1>Mafer & Víctor</h1>
+
+<h2 id="nombre"></h2>
+
+<p id="pases"></p>
+
+<label>¿Asistirán?</label><br>
+
+<select id="asistentes"></select>
+
+<br><br>
+
+<button onclick="confirmar()">
+Confirmar asistencia
+</button>
+
+<p id="mensaje"></p>
+
+</div>
+
+<script>
+
+const invitados = {
+
+"M001":{
+nombre:"Familia García",
+pases:2
+},
+
+"M002":{
+nombre:"Ana López",
+pases:1
+}
+
+};
+
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+if(invitados[id]){
+
+document.getElementById("nombre").innerText =
+invitados[id].nombre;
+
+document.getElementById("pases").innerText =
+"Pases asignados: " + invitados[id].pases;
+
+let select = document.getElementById("asistentes");
+
+for(let i=0;i<=invitados[id].pases;i++){
+
+let option = document.createElement("option");
+option.value = i;
+option.text = i;
+
+select.appendChild(option);
+
+}
+
+}else{
+
+document.body.innerHTML =
+"<h2>Invitación no encontrada</h2>";
+
+}
+
+function confirmar(){
+
+let cantidad =
+document.getElementById("asistentes").value;
+
+document.getElementById("mensaje").innerHTML =
+"¡Gracias! Confirmaste " + cantidad + " asistente(s).";
+
+}
+
+</script>
+
+</body>
+</html>
